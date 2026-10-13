@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Tandem.Domain\Tandem.Domain.csproj" />
+    <ProjectReference Include="..\Tandem.Application\Tandem.Application.csproj" />
+  </ItemGroup>
+</Project>

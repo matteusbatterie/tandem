@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: tandem-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tandem}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tandem_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-tandem}
+    ports:
+      - "5432:5432"
+    volumes:
+      - tandem-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tandem} -d ${POSTGRES_DB:-tandem}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  tandem-pgdata:
