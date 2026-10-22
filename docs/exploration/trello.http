@@ -1,0 +1,14 @@
+### Who am I
+GET {{trelloBaseUrl}}/members/me?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Member's boards
+GET {{trelloBaseUrl}}/members/me/boards?fields=name,url&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### List board lists
+GET {{trelloBaseUrl}}/members/me/boards/{id}/lists?fields=name&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Creates a card
+POST {{trelloBaseUrl}}/cards?idList={{listId}}&name={{cardName}}&desc={{cardDescription}}&key={{trelloKey}}&token={{trelloToken}}

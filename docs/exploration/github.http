@@ -1,0 +1,31 @@
+### List issues
+GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues?state=open&per_page=10
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+
+### Create issue
+@issueTitle=Test HTTP
+@issueBody=HTTP Client Request
+
+POST {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues
+Accept: application/vnd.github+json
+Content-Type: application/json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+{
+  "title": "{{issueTitle}}",
+  "body": "{{issueBody}}"
+}
+
+### Close issue
+@issueNumber=2
+
+PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{issueNumber}}
+Accept: application/vnd.github+json
+Content-Type: application/json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+{
+  "state": "closed"
+}

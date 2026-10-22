@@ -3,6 +3,15 @@
   <Folder Name="/docs/adr/">
     <File Path="docs/adr/0001-record-architecture-decisions.md" />
   </Folder>
+  <Folder Name="/docs/exploration/">
+    <File Path="docs/exploration/github.http" />
+    <File Path="docs/exploration/README.md" />
+    <File Path="docs/exploration/trello.http" />
+    <File Path="docs/exploration/http-client.env.json" />
+    <File Path="docs/exploration/http-client.env.json.user" />
+    <File Path="docs/exploration/http-client.env.json.user.example" />
+    <File Path="docs/exploration/Web.config" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".env" />

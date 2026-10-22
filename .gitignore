@@ -480,3 +480,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Second safeguard to sensity user keys and tokens
+docs/exploration/http-client.env.json.user
