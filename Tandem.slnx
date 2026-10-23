@@ -10,7 +10,6 @@
     <File Path="docs/exploration/http-client.env.json" />
     <File Path="docs/exploration/http-client.env.json.user" />
     <File Path="docs/exploration/http-client.env.json.user.example" />
-    <File Path="docs/exploration/Web.config" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
