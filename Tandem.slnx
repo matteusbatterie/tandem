@@ -2,6 +2,7 @@
   <Folder Name="/docs/" />
   <Folder Name="/docs/adr/">
     <File Path="docs/adr/0001-record-architecture-decisions.md" />
+    <File Path="docs/adr/0002-solution-structure.md" />
   </Folder>
   <Folder Name="/docs/exploration/">
     <File Path="docs/exploration/github.http" />
