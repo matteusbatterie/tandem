@@ -12,7 +12,7 @@ These files are documentation and a scratchpad. They are **not** automated tests
 | `trello.http`, `github.http` | Requests for the Visual Studio HTTP editor (VS 17.8 or later) |
 | `http-client.env.json` | Non-secret defaults: base URLs, sandbox repo name |
 | `http-client.env.json.user.example` | Template for your private values |
-| `http-client.env.json.user` | **Your** private values. Git-ignored, never committed |
+| `http-client.env.json.user` | **Your** private values for Visual Studio. Git-ignored, never committed |
 
 ## Setup
 
@@ -64,10 +64,12 @@ Copy `http-client.env.json.user.example` to `http-client.env.json.user` (same fo
   "dev": {
     "trelloKey": "YOUR_TRELLO_API_KEY",
     "trelloToken": "YOUR_TRELLO_TOKEN",
+    "trelloBoardId": "YOUR_TRELLO_BOARD_ID",
     "githubToken": "YOUR_GITHUB_TOKEN",
     "githubUser": "YOUR_GITHUB_USERNAME",
     "githubRepo": "GITHUB_REPO",
-    "githubUserAgent": "YOUR_USER_AGENT"
+    "githubUserAgent": "YOUR_USER_AGENT",
+    "webhookUrl": "YOUR_WEBHOOK_URL"
   }
 }
 ```
@@ -75,14 +77,51 @@ Copy `http-client.env.json.user.example` to `http-client.env.json.user` (same fo
 The Trello and Github API keys were generated in the steps above. The `githubUser` is your GitHub username, and `githubRepo` 
 is the name of the sandbox repository you created. The `githubUserAgent` can be any string that identifies your application (for example, "Tandem API Exploration").
 
+In the `webhookUrl`, you can use any callback URL that you control. If you don't have one, you can use a service like [Webhook.site](https://webhook.site/) to generate a temporary URL for testing.
+
 The `.user` file is excluded by the repository's `*.user` rule. Never commit it, paste it into a chat, or include it in a
 zip you share.
 
 If you happen to commit or share your `.user` file, revoke all your tokens immediately and generate new ones.
 
-### 5. Send your first request
+### 5. Use VS Code (REST Client extension)
 
-1. Open `trello.http` in Visual Studio.
+The VS Code REST Client extension does not automatically load Visual Studio's `http-client.env.json.user` file. Keep
+your secrets out of the repository by adding them to your **User** `settings.json` instead (Command Palette →
+**Preferences: Open User Settings (JSON)**):
+
+```json
+{
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "trelloBaseUrl": "https://api.trello.com/1",
+      "githubBaseUrl": "https://api.github.com",
+    },
+    "dev": {
+      "trelloKey": "YOUR_TRELLO_API_KEY",
+      "trelloToken": "YOUR_TRELLO_TOKEN",
+      "trelloBoardId": "YOUR_TRELLO_BOARD_ID",
+      "webhookUrl": "YOUR_WEBHOOK_URL",
+      "githubToken": "YOUR_GITHUB_TOKEN",
+      "githubUser": "YOUR_GITHUB_USERNAME",
+      "githubRepo": "GITHUB_REPO",
+      "githubUserAgent": "YOUR_USER_AGENT"
+    }
+  }
+}
+```
+
+Select `dev` environment by looking for the `Rest Client: Switch Environment`command, or by pressing `Ctrl+Alt+E`.
+User settings stay on your machine unless you
+enable Settings Sync; do not put these values in repository workspace settings.
+
+For the webhook requests, send **Create Webhook** first and wait for a successful response. Then send **Get Webhook**;
+its URL uses the `id` from the named `createdWebhook` response. If creation fails, the follow-up request cannot resolve
+that response variable.
+
+### 6. Send your first request
+
+1. Open `trello.http` in Visual Studio or VS Code.
 2. Select the `dev` environment in the dropdown at the top right of the editor.
 3. Click **Send Request** above `Who am I`. You should get a `200` with your Trello profile.
 4. Run `Member's boards` to find the `id` of `Tandem Sandbox`, then continue with the other requests.

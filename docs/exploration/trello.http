@@ -1,14 +1,95 @@
-### Who am I
+### Members: Who am I
 GET {{trelloBaseUrl}}/members/me?key={{trelloKey}}&token={{trelloToken}}
 Accept: application/json
 
-### Member's boards
+### Members: Member's boards
 GET {{trelloBaseUrl}}/members/me/boards?fields=name,url&key={{trelloKey}}&token={{trelloToken}}
 Accept: application/json
 
-### List board lists
-GET {{trelloBaseUrl}}/members/me/boards/{id}/lists?fields=name&key={{trelloKey}}&token={{trelloToken}}
+### Tokens: List Webhooks for Token
+GET {{trelloBaseUrl}}/tokens/{{trelloToken}}/webhooks?key={{trelloKey}}
 Accept: application/json
 
-### Creates a card
-POST {{trelloBaseUrl}}/cards?idList={{listId}}&name={{cardName}}&desc={{cardDescription}}&key={{trelloKey}}&token={{trelloToken}}
+### Webhooks: Create Webhook
+@webhookDescription = YOUR_WEBHOOK_DESCRIPTION
+# @name createdWebhook
+POST {{trelloBaseUrl}}/webhooks?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "description": "{{webhookDescription}}",
+  "callbackURL": "{{webhookUrl}}",
+  "idModel": "{{trelloBoardId}}",
+  "active": true
+}
+
+### Webhooks: Get Webhook
+GET {{trelloBaseUrl}}/webhooks/{{createdWebhook.response.body.$.id}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Webhooks: Delete Webhook
+DELETE {{trelloBaseUrl}}/webhooks/{{createdWebhook.response.body.$.id}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Boards: Board's lists
+# @name boardLists
+GET {{trelloBaseUrl}}/boards/{{trelloBoardId}}/lists?fields=id,name&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Lists: List's cards
+GET {{trelloBaseUrl}}/lists/{{boardLists.response.body.$.id}}/cards?fields=id,name,desc,idList&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Cards: Creates a card
+@cardName = YOUR_CARD_NAME
+@cardDesc = YOUR_CARD_DESCRIPTION
+# @name createdCard
+POST {{trelloBaseUrl}}/cards?idList={{boardLists.response.body.$.id}}&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "{{cardName}}",
+  "desc": "{{cardDesc}}",
+  "pos": "top"
+}
+
+### Cards: Get a card
+GET {{trelloBaseUrl}}/cards/{{createdCard.response.body.$.id}}?fields=name,desc&key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+
+### Cards: Rename a card
+@newCardName = NEW_CARD_NAME
+PUT {{trelloBaseUrl}}/cards/{{createdCard.response.body.$.id}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "{{newCardName}}"
+}
+
+### Cards: Move a card
+@newListId = NEW_LIST_ID
+PUT {{trelloBaseUrl}}/cards/{{createdCard.response.body.$.id}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "idList": "{{newListId}}"
+}
+
+### Cards: Add a comment to a card
+@cardComment = YOUR_COMMENT_TEXT
+POST {{trelloBaseUrl}}/cards/{{createdCard.response.body.$.id}}/actions/comments?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "text": "{{cardComment}}"
+}
+
+### Cards: Delete a card
+@cardIdToDelete = YOUR_CARD_ID_TO_DELETE
+DELETE {{trelloBaseUrl}}/cards/{{cardIdToDelete}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
