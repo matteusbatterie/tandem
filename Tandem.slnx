@@ -9,12 +9,10 @@
     <File Path="docs/exploration/README.md" />
     <File Path="docs/exploration/trello.http" />
     <File Path="docs/exploration/http-client.env.json" />
-    <File Path="docs/exploration/http-client.env.json.user" />
     <File Path="docs/exploration/http-client.env.json.user.example" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
-    <File Path=".env" />
     <File Path=".env.example" />
     <File Path=".gitattributes" />
     <File Path=".github/workflows/ci.yml" />
