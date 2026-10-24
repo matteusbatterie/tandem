@@ -89,6 +89,15 @@ Content-Type: application/json
   "text": "{{cardComment}}"
 }
 
+### Cards: Archive a card
+PUT {{trelloBaseUrl}}/cards/{{createdCard.response.body.$.id}}?key={{trelloKey}}&token={{trelloToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "closed": true
+}
+
 ### Cards: Delete a card
 @cardIdToDelete = YOUR_CARD_ID_TO_DELETE
 DELETE {{trelloBaseUrl}}/cards/{{cardIdToDelete}}?key={{trelloKey}}&token={{trelloToken}}

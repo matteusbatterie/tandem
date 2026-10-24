@@ -18,9 +18,10 @@ These files are documentation and a scratchpad. They are **not** automated tests
 
 ### 1. Sandbox accounts
 
-Here is how you can setup your Trello and GitHub accounts for safe exploration. You can use your personal accounts, but make sure to create a:
+Here is how you can setup your Trello and GitHub accounts for safe exploration. You can use your personal accounts, but it's recommended
+to create fresh accounts for this purpose. Here is what you need:
 
-- **Trello:** create a Workspace and a board named `Tandem Sandbox` with a few lists (for example To Do, Doing, Done).
+- **Trello:** create a Workspace and a board named `Tandem Sandbox` with a few lists (e.g.: Open Issues; Closed Issues).
 - **GitHub:** create a public repository named `tandem-sandbox` with Issues enabled.
 
 Use fake data only. Issues in a public repository are visible to everyone.
@@ -33,8 +34,18 @@ like a password. You can revoke them any time from your Trello account settings.
 1. Go to <https://trello.com/apps/admin> and create a new app. Make sure you choose **"My app doesn't use Power-up capabilities"**
   and fill in the name, workspace, email and author.
 2. Open the app and find its API key section (Trello's docs call this tab *Trello Auth*). Copy the **API key**.
-3. In the same section, click **Generate a Token** in the text to the right of your API key. You'll be prompted to authorize the app
-  to access your account. Click **Allow**. Copy the **token**.
+3. Generate a **token** following the instructions below.
+
+Generating a token:
+
+- **Option A:** quick, but it never expires. In the same section, click **Generate a Token** next to your API key and
+  click **Allow**. This token **does not expire** and gives broad access to your Trello account, so revoke it from your
+  Trello account settings as soon as you finish exploring.
+- **Option B (recommended):** scoped and expiring. Open this URL, replacing `YOUR_API_KEY`, and click **Allow**:
+
+```text
+https://trello.com/1/authorize?key=YOUR_API_KEY&scope=read,write&expiration=30days&response_type=token
+```
 
 These values should be filled in your `http-client.env.json.user` file (see below).
 
@@ -125,7 +136,7 @@ that response variable.
 ### 6. Send your first request
 
 1. Open `trello.http` in Visual Studio or VS Code.
-2. Select the `dev` environment in the dropdown at the top right of the editor.
+2. Select the `dev` environment (dropdown at the top right in Visual Studio, `Ctrl+Alt+E` on VS Code).
 3. Click **Send Request** above `Who am I`. You should get a `200` with your Trello profile.
 4. Run `Member's boards` to find the `id` of `Tandem Sandbox`, then continue with the other requests.
 

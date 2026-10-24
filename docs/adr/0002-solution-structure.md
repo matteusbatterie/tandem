@@ -1,4 +1,4 @@
-# Record architecture decisions
+# 0002. Solution strcuture
 
 - **Status**: Accepted
 - **Date**: 2026-10-22
@@ -11,18 +11,30 @@ We should be able to easily add new connectors/webhooks in the future without af
 
 ## Decision
 
-For the project structure and phylosophy, we'll follow the principles of Clean Architecture and Domain-Driven Design (DDD). The project will be structured into the following layers:
+For the project structure and philosophy, we'll follow the principles of Clean Architecture and Domain-Driven Design (DDD). The project will be
+structured into the following layers:
 
-- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent of any external frameworks or libraries.
-- **Application Layer**: Contains the application services that orchestrate the use cases of the system. This layer depends on the domain layer but is NOT dependent of any external frameworks or libraries.
-- **Infrastructure Layer**: Contains the implementation details for external systems, such as databases, APIs, and messaging systems. This layer depends on the application and domain layers.
+- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent on any external frameworks or libraries.
+- **Application Layer**: Contains the application services that orchestrate the use cases of the system. This layer depends on the domain layer but is
+NOT dependent on any external frameworks or libraries.
+- **Infrastructure Layer**: Contains the implementation details for external systems, such as databases, APIs, and messaging systems. This layer
+depends on the application and domain layers.
 
 APIs and Workers hosts will have their own projects/folders and will depend on the same Application and Infrastructure Layers.
 
-Each Connector will have its own Worker project, so that we can easily add new connectors in the future without affecting the core logic of Tandem.
+Each connector is a separate class library that implements a port defined in the Application layer. The API and Worker hosts
+reference the connectors and register them at startup, so adding a connector means adding a project and a registration, without
+changing the Domain or Application layers.
+
+## Alternatives Considered
+
+We could have only one host that runs the Worker inside the API process, or one project with folders inside instead of separate projects for each Connector.
+
+This would've reduced complexity and overhead, probably more suited for the small scope of this presentation. However, since the main point of this repository
+is to display and exercise knowledge, I opted for the more complex approach.
 
 ## Consequences
 
 Boundaries are enforced by the project structure, which will help maintain a clean separation of concerns and make it easier to test and maintain the codebase.
 
-On the other hand, we'll inevitably have more projects and boilerplates for a small codebase, and two processes or more to run locally.
+On the other hand, we'll inevitably have more projects and boilerplate for a small codebase, and two processes or more to run locally.
