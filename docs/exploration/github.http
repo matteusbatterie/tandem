@@ -1,31 +1,194 @@
-### List issues
+### Issues/Issues: List open issues
 GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues?state=open&per_page=10
 Accept: application/vnd.github+json
 Authorization: Bearer {{githubToken}}
 User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
 
-### Create issue
-@issueTitle=Test HTTP
-@issueBody=HTTP Client Request
+### Issues/Issues: List closed issues
+GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues?state=closed&per_page=10
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
 
+### Issues/Issues: Create issue
+@issueTitle = YOUR_ISSUE_TITLE
+@issueBody = YOUR_ISSUE_BODY
+# @name createdIssue
 POST {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues
 Accept: application/vnd.github+json
 Content-Type: application/json
 Authorization: Bearer {{githubToken}}
 User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
 {
   "title": "{{issueTitle}}",
   "body": "{{issueBody}}"
 }
 
-### Close issue
-@issueNumber=2
-
-PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{issueNumber}}
+### Issues/Issues: Close issue
+# @name closedIssue
+PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}
 Accept: application/vnd.github+json
 Content-Type: application/json
 Authorization: Bearer {{githubToken}}
 User-Agent: {{githubUserAgent}}
+
 {
   "state": "closed"
 }
+
+### Issues/Issues: Reopen issue
+# @name reopenedIssue
+PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}
+Accept: application/vnd.github+json
+Content-Type: application/json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+
+{
+  "state": "open"
+}
+
+### Issues/Issues: Edit title and body
+@updatedTitle = YOUR_UPDATED_TITLE
+@updatedBody = YOUR_UPDATED_BODY
+PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}
+Accept: application/vnd.github+json
+Content-Type: application/json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "title": "{{updatedTitle}}",
+  "body": "{{updatedBody}}"
+}
+
+### Issues/Comments: List comments on issue
+GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/comments
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Comments: Add comment
+@commentBody = YOUR_COMMENT_BODY
+# @name createdComment
+POST {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/comments
+Accept: application/vnd.github+json
+Content-Type: application/json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "body": "{{commentBody}}"
+}
+
+### Issues/Comments: Delete a comment
+DELETE {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/comments/{{createdComment.response.body.$.id}}
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Labels: List labels for an repository
+GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/labels
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Labels: List labels for an issue
+GET {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/labels
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Labels: Create a label
+@labelName = YOUR_LABEL_NAME
+@labelDescription = YOUR_LABEL_DESCRIPTION
+# Enter the hex color without the leading '#' (e.g.: ff5733)
+@labelColor = YOUR_LABEL_HEX_COLOR
+# @name createdLabel
+POST {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/labels
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "name": "{{labelName}}",
+  "description": "{{labelDescription}}",
+  "color": "{{labelColor}}"
+}
+
+### Issues/Labels: Update a label
+# Since it's a PATCH, leave fields empty to preserve old values
+@newLabelName = NEW_LABEL_NAME
+@newLabelDescription = NEW_LABEL_DESCRIPTION
+@newLabelColor = NEW_LABEL_HEX_COLOR
+# @name updatedLabel
+PATCH {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/labels/{{labelName}}
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "new_name": "{{newLabelName}}",
+  "description": "{{newLabelDescription}}",
+  "color": "{{newLabelColor}}"
+}
+
+### Issues/Labels: Delete a label
+DELETE {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/labels/{{createdLabel.response.bodt.$.name}}
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Labels: Add an existing label to issue
+@issueLabels = "YOUR_LABEL", "ANOTHER_LABEL"
+
+# @name addedLabels
+POST {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/labels
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "labels": [{{issueLabels}}]
+}
+
+### Issues/Labels: Replace all labels from an issue
+# @name replacedLabels
+PUT {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/labels
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+{
+  "labels": [{{issueLabels}}]
+}
+
+### Issues/Labels: Remove label from an issue
+@labelToRemove = LABEL_TO_BE_REMOVED
+DELETE {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/labels/{{labelToRemove}}
+Accept: application/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
+
+### Issues/Labels: Remove all labels from an issue
+DELETE {{githubBaseUrl}}/repos/{{githubUser}}/{{githubRepo}}/issues/{{createdIssue.response.body.$.number}}/labels
+Accept: aaplication/vnd.github+json
+Authorization: Bearer {{githubToken}}
+User-Agent: {{githubUserAgent}}
+X-GitHub-Api-Version: 2026-03-10
