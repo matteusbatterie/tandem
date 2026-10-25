@@ -1,4 +1,4 @@
-# 0002. Solution strcuture
+# 0002. Solution structure
 
 - **Status**: Accepted
 - **Date**: 2026-10-22
@@ -7,14 +7,14 @@
 
 Tandem should follow principles to ensure maintainability, scalability, and testability of the codebase without depending on Trello or GitHub.
 
-We should be able to easily add new connectors/webhooks in the future without affecting the core logic of Tandem.
+I should be able to easily add new connectors/webhooks in the future without affecting the core logic of Tandem.
 
 ## Decision
 
 For the project structure and philosophy, we'll follow the principles of Clean Architecture and Domain-Driven Design (DDD). The project will be
 structured into the following layers:
 
-- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent on any external frameworks or libraries.
+- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent of any external frameworks or libraries.
 - **Application Layer**: Contains the application services that orchestrate the use cases of the system. This layer depends on the domain layer but is
 NOT dependent on any external frameworks or libraries.
 - **Infrastructure Layer**: Contains the implementation details for external systems, such as databases, APIs, and messaging systems. This layer
@@ -28,10 +28,12 @@ changing the Domain or Application layers.
 
 ## Alternatives Considered
 
-We could have only one host that runs the Worker inside the API process, or one project with folders inside instead of separate projects for each Connector.
+I could have only one host that runs the Worker inside the API process, or one project with folders inside instead of separate projects for each Connector.
 
-This would've reduced complexity and overhead, probably more suited for the small scope of this presentation. However, since the main point of this repository
-is to display and exercise knowledge, I opted for the more complex approach.
+This would've reduced complexity and overhead, probably more suited for the small scope of this presentation.
+
+However, acknowledging a webhook fast is a different job from slow work that may fail and retry, so they shouldn't share a process. On top of that, since the main point of this repository
+is to display and exercise knowledge, I opted for the more complete approach.
 
 ## Consequences
 
